@@ -1,0 +1,6 @@
+[submodule "cmake"]
+	path = cmake
+	url = https://github.com/funkey/cmake
+[submodule "modules/util"]
+	path = modules/util
+	url = https://github.com/funkey/util
