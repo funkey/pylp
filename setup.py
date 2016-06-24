@@ -10,7 +10,6 @@ class copy_lib(build_py):
 
     def run(self):
 
-        # TODO: change based on architecture
         lib_extensions = [ ".so", ".dylib", ".dll" ]
 
         module_name = "pylp"
