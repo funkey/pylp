@@ -8,7 +8,6 @@
 #include <scip/cons_linear.h>
 
 #include <util/Logger.h>
-#include <util/ProgramOptions.h>
 #include "ScipBackend.h"
 
 using namespace logger;
