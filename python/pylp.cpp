@@ -6,6 +6,8 @@
 
 #include <util/exceptions.h>
 #include <solver/ScipBackend.h>
+#include <solver/GurobiBackend.h>
+#include <solver/CplexBackend.h>
 #include "logging.h"
 #include "config.h"
 
@@ -144,6 +146,26 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("set_constraints", &ScipBackend::setConstraints)
 			.def("solve", static_cast<std::string(ScipBackend::*)(Solution&)>(&ScipBackend::solve))
 			;
+
+#ifdef HAVE_GUROBI
+	// GurobiBackend
+	boost::python::class_<GurobiBackend, boost::noncopyable>("GurobiBackend")
+			.def("initialize", static_cast<void(GurobiBackend::*)(unsigned int, VariableType)>(&GurobiBackend::initialize))
+			.def("set_objective", static_cast<void(GurobiBackend::*)(const LinearObjective&)>(&GurobiBackend::setObjective))
+			.def("set_constraints", &GurobiBackend::setConstraints)
+			.def("solve", static_cast<std::string(GurobiBackend::*)(Solution&)>(&GurobiBackend::solve))
+			;
+#endif
+
+#ifdef HAVE_CPLEX
+	// CplexBackend
+	boost::python::class_<CplexBackend, boost::noncopyable>("CplexBackend")
+			.def("initialize", static_cast<void(CplexBackend::*)(unsigned int, VariableType)>(&CplexBackend::initialize))
+			.def("set_objective", static_cast<void(CplexBackend::*)(const LinearObjective&)>(&CplexBackend::setObjective))
+			.def("set_constraints", &CplexBackend::setConstraints)
+			.def("solve", static_cast<std::string(CplexBackend::*)(Solution&)>(&CplexBackend::solve))
+			;
+#endif
 }
 
 } // namespace pylp
