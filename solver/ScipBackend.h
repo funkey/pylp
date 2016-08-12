@@ -58,6 +58,13 @@ public:
 
 	bool solve(Solution& solution, std::string& message);
 
+	std::string solve(Solution& solution) {
+
+		std::string message;
+		solve(solution, message);
+		return message;
+	}
+
 private:
 
 	//////////////

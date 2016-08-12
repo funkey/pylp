@@ -17,7 +17,7 @@ public:
 
 	double& operator[](unsigned int i) { return _solution[i]; }
 
-	std::vector<double>& getVector() { return _solution; }
+	const std::vector<double>& getVector() const { return _solution; }
 
 	void setValue(double value) { _value = value; }
 
