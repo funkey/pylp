@@ -1,1 +1,1 @@
-from pylp import *
+from .pylp import *
