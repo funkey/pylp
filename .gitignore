@@ -3,6 +3,7 @@
 *.dll
 *.sw[po]
 build
+build_pylp
 *.hdf
 *.kdev4
 *.include_dirs
@@ -18,3 +19,4 @@ CMakeFiles
 Makefile
 cmake_install.cmake
 config.h
+*.pyc
