@@ -13,6 +13,11 @@ Check out the submodules:
 git submodule update --init
 ```
 
+Get dependencies:
+```bash
+sudo apt-get install libboost-all-dev python-dev
+```
+
 Compile and install the wrapper:
 ```bash
 python setup.py install
