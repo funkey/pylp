@@ -146,28 +146,38 @@ ScipBackend::setConstraints(const LinearConstraints& constraints) {
 void
 ScipBackend::addConstraint(const LinearConstraint& constraint) {
 
-	// create the lhs expression
+	std::cout << "Creating SCIP constraint..." << std::endl;
+
+	// create a list of variables and their coefficients
+	std::vector<SCIP_VAR*> vars;
+	std::vector<SCIP_Real> coefs;
+	for (auto& p : constraint.getCoefficients()) {
+		vars.push_back(_variables[p.first]);
+		coefs.push_back(p.second);
+	}
+
+	// create the SCIP constraint lhs <= linear expr <= rhs
 	SCIP_CONS* c;
 	std::string name("c");
 	name += boost::lexical_cast<std::string>(_constraints.size());
+
+	// set lhs and rhs according to constraint relation
+	SCIP_Real lhs = constraint.getValue();
+	SCIP_Real rhs = constraint.getValue();
+	if (constraint.getRelation() == LessEqual)
+		lhs = -SCIPinfinity(_scip);
+	if (constraint.getRelation() == GreaterEqual)
+		rhs = SCIPinfinity(_scip);
+
 	SCIP_CALL_ABORT(SCIPcreateConsBasicLinear(
 			_scip,
 			&c,
 			name.c_str(),
-			0, /* no entries, initially */
-			NULL,
-			NULL,
-			(constraint.getRelation() == Equal ? 0 : (constraint.getRelation() == LessEqual ? -SCIPinfinity(_scip) : SCIPinfinity(_scip))),
-			constraint.getValue()));
-
-	// set the coefficients
-	unsigned int i;
-	double value;
-	for (auto& p : constraint.getCoefficients()) {
-
-		std::tie(i, value) = p;
-		SCIP_CALL_ABORT(SCIPaddCoefLinear(_scip, c, _variables[i], value));
-	}
+			vars.size(),
+			&vars[0],
+			&coefs[0],
+			lhs,
+			rhs));
 
 	_constraints.push_back(c);
 
