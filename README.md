@@ -15,8 +15,12 @@ git submodule update --init
 
 Get dependencies:
 ```bash
-sudo apt-get install libboost-all-dev python-dev
+sudo apt-get install cmake libboost-all-dev python-dev
 ```
+
+To get Gurobi support, set the `cmake` variable `Gurobi_ROOT_DIR` (or the
+environment variable `$GUROBI_ROOT_DIR` before you run `cmake`) to the Gurobi
+subdirectory containing the /lib and /bin directories.
 
 Compile and install the wrapper:
 ```bash
