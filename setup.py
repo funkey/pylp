@@ -30,9 +30,13 @@ class cmake_lib(build_py):
             # make sure the module dir exists
             self.mkpath(module_dir)
 
-            # copy our library to the module dir
             print(lib_base)
-            lib_file = [ lib_base + e for e in lib_extensions if os.path.isfile(lib_base + e) ][0]
+            lib_files = [ lib_base + e for e in lib_extensions if os.path.isfile(lib_base + e) ]
+            if not lib_files:
+                raise RuntimeError("library not found, build incomplete")
+            lib_file = lib_files[0]
+
+            # copy our library to the module dir
             self.copy_file(lib_file, module_dir)
 
         # run parent implementation
