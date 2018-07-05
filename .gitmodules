@@ -1,3 +1,6 @@
 [submodule "cmake"]
 	path = cmake
 	url = https://github.com/funkey/cmake
+[submodule "solver"]
+	path = solvers
+	url = https://github.com/funkey/solvers

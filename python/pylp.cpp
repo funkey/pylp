@@ -5,9 +5,11 @@
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
 
 #include <util/exceptions.h>
-#include <solver/ScipBackend.h>
-#include <solver/GurobiBackend.h>
-#include <solver/CplexBackend.h>
+#include <solvers/BackendPreference.h>
+#include <solvers/SolverFactory.h>
+#include <solvers/ScipBackend.h>
+#include <solvers/GurobiBackend.h>
+#include <solvers/CplexBackend.h>
 #include "logging.h"
 #include "config.h"
 
