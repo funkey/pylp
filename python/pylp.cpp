@@ -82,6 +82,12 @@ BOOST_PYTHON_MODULE(pylp) {
 		.def(boost::python::map_indexing_suite<std::map<unsigned int, double>>())
 	;
 
+	// std::map<unsigned int, VariableType>
+	boost::python::class_<std::map<unsigned int, VariableType>>("VariableTypeMap")
+		.def(boost::python::init<>())
+		.def(boost::python::map_indexing_suite<std::map<unsigned int, VariableType>>())
+	;
+
 	// Sense
 	boost::python::enum_<Sense>("Sense")
 			.value("Minimize", Minimize)
@@ -142,6 +148,7 @@ BOOST_PYTHON_MODULE(pylp) {
 	// ScipBackend
 	boost::python::class_<ScipBackend, boost::noncopyable>("ScipBackend")
 			.def("initialize", static_cast<void(ScipBackend::*)(unsigned int, VariableType)>(&ScipBackend::initialize))
+			.def("initialize", static_cast<void(ScipBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&ScipBackend::initialize))
 			.def("set_objective", static_cast<void(ScipBackend::*)(const LinearObjective&)>(&ScipBackend::setObjective))
 			.def("set_constraints", &ScipBackend::setConstraints)
 			.def("solve", static_cast<std::string(ScipBackend::*)(Solution&)>(&ScipBackend::solve))
@@ -151,6 +158,7 @@ BOOST_PYTHON_MODULE(pylp) {
 	// GurobiBackend
 	boost::python::class_<GurobiBackend, boost::noncopyable>("GurobiBackend")
 			.def("initialize", static_cast<void(GurobiBackend::*)(unsigned int, VariableType)>(&GurobiBackend::initialize))
+			.def("initialize", static_cast<void(GurobiBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&GurobiBackend::initialize))
 			.def("set_objective", static_cast<void(GurobiBackend::*)(const LinearObjective&)>(&GurobiBackend::setObjective))
 			.def("set_constraints", &GurobiBackend::setConstraints)
 			.def("solve", static_cast<std::string(GurobiBackend::*)(Solution&)>(&GurobiBackend::solve))
@@ -161,6 +169,7 @@ BOOST_PYTHON_MODULE(pylp) {
 	// CplexBackend
 	boost::python::class_<CplexBackend, boost::noncopyable>("CplexBackend")
 			.def("initialize", static_cast<void(CplexBackend::*)(unsigned int, VariableType)>(&CplexBackend::initialize))
+			.def("initialize", static_cast<void(CplexBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&CplexBackend::initialize))
 			.def("set_objective", static_cast<void(CplexBackend::*)(const LinearObjective&)>(&CplexBackend::setObjective))
 			.def("set_constraints", &CplexBackend::setConstraints)
 			.def("solve", static_cast<std::string(CplexBackend::*)(Solution&)>(&CplexBackend::solve))
