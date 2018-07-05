@@ -1,5 +1,6 @@
 #include <sstream>
 #include <boost/python.hpp>
+#include <boost/python/tuple.hpp>
 #include <boost/python/exception_translator.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
@@ -12,12 +13,28 @@
 #include <solvers/CplexBackend.h>
 #include "logging.h"
 #include "config.h"
+#include "tuple.h"
 
 template <typename Map, typename K, typename V>
 const V& genericGetter(const Map& map, const K& k) { return map[k]; }
 template <typename Map, typename K, typename V>
 void genericSetter(Map& map, const K& k, const V& value) { map[k] = value; }
 
+std::shared_ptr<LinearSolverBackend> createLinearSolverBackend(Preference preference) {
+
+	SolverFactory factory;
+	return factory.createLinearSolverBackend(preference);
+}
+
+std::pair<Solution, std::string> solve(LinearSolverBackend& solver) {
+
+	Solution solution;
+	std::string message;
+
+	solver.solve(solution, message);
+
+	return std::make_pair(solution, message);
+}
 
 template <typename T>
 std::string print(const T& t) {
@@ -147,36 +164,27 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("__setitem__", &genericSetter<LinearConstraints, size_t, const LinearConstraint&>)
 	;
 
-	// ScipBackend
-	boost::python::class_<ScipBackend, boost::noncopyable>("ScipBackend")
-			.def("initialize", static_cast<void(ScipBackend::*)(unsigned int, VariableType)>(&ScipBackend::initialize))
-			.def("initialize", static_cast<void(ScipBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&ScipBackend::initialize))
-			.def("set_objective", static_cast<void(ScipBackend::*)(const LinearObjective&)>(&ScipBackend::setObjective))
-			.def("set_constraints", &ScipBackend::setConstraints)
-			.def("solve", static_cast<std::string(ScipBackend::*)(Solution&)>(&ScipBackend::solve))
-			;
+	// Preference
+	boost::python::enum_<Preference>("Preference")
+			.value("Any", Any)
+			.value("Cplex", Cplex)
+			.value("Gurobi", Gurobi)
+			.value("Scip", Scip)
+	;
 
-#ifdef HAVE_GUROBI
-	// GurobiBackend
-	boost::python::class_<GurobiBackend, boost::noncopyable>("GurobiBackend")
-			.def("initialize", static_cast<void(GurobiBackend::*)(unsigned int, VariableType)>(&GurobiBackend::initialize))
-			.def("initialize", static_cast<void(GurobiBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&GurobiBackend::initialize))
-			.def("set_objective", static_cast<void(GurobiBackend::*)(const LinearObjective&)>(&GurobiBackend::setObjective))
-			.def("set_constraints", &GurobiBackend::setConstraints)
-			.def("solve", static_cast<std::string(GurobiBackend::*)(Solution&)>(&GurobiBackend::solve))
-			;
-#endif
+	// create_linear_solver
+	boost::python::def("create_linear_solver", createLinearSolverBackend);
 
-#ifdef HAVE_CPLEX
-	// CplexBackend
-	boost::python::class_<CplexBackend, boost::noncopyable>("CplexBackend")
-			.def("initialize", static_cast<void(CplexBackend::*)(unsigned int, VariableType)>(&CplexBackend::initialize))
-			.def("initialize", static_cast<void(CplexBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&CplexBackend::initialize))
-			.def("set_objective", static_cast<void(CplexBackend::*)(const LinearObjective&)>(&CplexBackend::setObjective))
-			.def("set_constraints", &CplexBackend::setConstraints)
-			.def("solve", static_cast<std::string(CplexBackend::*)(Solution&)>(&CplexBackend::solve))
+	// LinearSolverBackend
+	boost::python::class_<LinearSolverBackend, boost::noncopyable>("LinearSolver", boost::python::no_init)
+			.def("initialize", static_cast<void(LinearSolverBackend::*)(unsigned int, VariableType)>(&LinearSolverBackend::initialize))
+			.def("initialize", static_cast<void(LinearSolverBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&LinearSolverBackend::initialize))
+			.def("set_objective", static_cast<void(LinearSolverBackend::*)(const LinearObjective&)>(&LinearSolverBackend::setObjective))
+			.def("set_constraints", &LinearSolverBackend::setConstraints)
+			.def("solve", &solve)
 			;
-#endif
+	boost::python::register_ptr_to_python<std::shared_ptr<LinearSolverBackend>>();
+	::std_pair_to_python_converter<Solution, std::string>();
 }
 
 } // namespace pylp
