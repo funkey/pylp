@@ -140,6 +140,7 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("get_sense", &LinearObjective::getSense)
 			.def("resize", &LinearObjective::resize)
 			.def("__len__", &LinearObjective::size)
+			.def("__str__", &print<LinearObjective>)
 	;
 
 	// Constraint
