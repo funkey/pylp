@@ -79,8 +79,8 @@ BOOST_PYTHON_MODULE(pylp) {
 			.value("All", logger::All)
 			.value("User", logger::User)
 			;
-	boost::python::def("setLogLevel", setLogLevel);
-	boost::python::def("getLogLevel", getLogLevel);
+	boost::python::def("set_log_level", setLogLevel);
+	boost::python::def("get_log_level", getLogLevel);
 
 	boost::python::enum_<VariableType>("VariableType")
 			.value("Continuous" ,Continuous)
