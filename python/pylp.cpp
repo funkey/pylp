@@ -26,22 +26,22 @@ std::shared_ptr<LinearSolverBackend> createLinearSolverBackend(Preference prefer
 	return factory.createLinearSolverBackend(preference);
 }
 
-std::pair<Solution, std::string> solve(LinearSolverBackend& solver) {
+std::pair<Solution, boost::python::str> solve(LinearSolverBackend& solver) {
 
 	Solution solution;
 	std::string message;
 
 	solver.solve(solution, message);
 
-	return std::make_pair(solution, message);
+	return std::make_pair(solution, boost::python::str(message));
 }
 
 template <typename T>
-std::string print(const T& t) {
+boost::python::str print(const T& t) {
 
 	std::stringstream ss;
 	ss << t;
-	return ss.str();
+	return boost::python::str(ss.str());
 }
 
 #if defined __clang__ && __clang_major__ < 6
