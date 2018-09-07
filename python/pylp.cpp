@@ -16,7 +16,7 @@
 #include "tuple.h"
 
 template <typename Map, typename K, typename V>
-const V& genericGetter(const Map& map, const K& k) { return map[k]; }
+const V& genericGetter(Map& map, const K& k) { return map[k]; }
 template <typename Map, typename K, typename V>
 void genericSetter(Map& map, const K& k, const V& value) { map[k] = value; }
 
@@ -98,13 +98,15 @@ BOOST_PYTHON_MODULE(pylp) {
 	// std::map<unsigned int, double>
 	boost::python::class_<std::map<unsigned int, double>>("map_uid")
 		.def(boost::python::init<>())
-		.def(boost::python::map_indexing_suite<std::map<unsigned int, double>>())
+		.def("__getitem__", &genericGetter<std::map<unsigned int, double>, unsigned int, double>, boost::python::return_value_policy<boost::python::copy_const_reference>())
+		.def("__setitem__", &genericSetter<std::map<unsigned int, double>, unsigned int, double>)
 	;
 
 	// std::map<unsigned int, VariableType>
 	boost::python::class_<std::map<unsigned int, VariableType>>("VariableTypeMap")
 		.def(boost::python::init<>())
-		.def(boost::python::map_indexing_suite<std::map<unsigned int, VariableType>>())
+		.def("__getitem__", &genericGetter<std::map<unsigned int, VariableType>, unsigned int, VariableType>, boost::python::return_value_policy<boost::python::copy_const_reference>())
+		.def("__setitem__", &genericSetter<std::map<unsigned int, VariableType>, unsigned int, VariableType>)
 	;
 
 	// Sense
