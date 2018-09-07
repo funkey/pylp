@@ -185,7 +185,7 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("solve", &solve)
 			;
 	boost::python::register_ptr_to_python<std::shared_ptr<LinearSolverBackend>>();
-	::std_pair_to_python_converter<Solution, std::string>();
+	::std_pair_to_python_converter<Solution, boost::python::str>();
 }
 
 } // namespace pylp
