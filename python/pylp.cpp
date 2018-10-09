@@ -186,6 +186,7 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("initialize", static_cast<void(LinearSolverBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&LinearSolverBackend::initialize))
 			.def("set_objective", static_cast<void(LinearSolverBackend::*)(const LinearObjective&)>(&LinearSolverBackend::setObjective))
 			.def("set_constraints", &LinearSolverBackend::setConstraints)
+			.def("set_timeout", &LinearSolverBackend::setTimeout)
 			.def("set_optimality_gap", &LinearSolverBackend::setOptimalityGap, LsbSetOptimialityGap())
 			.def("solve", &solve)
 			;
