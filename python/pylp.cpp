@@ -63,6 +63,8 @@ void translateException(const Exception& e) {
 		PyErr_SetString(PyExc_RuntimeError, e.what());
 }
 
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(LsbSetOptimialityGap, setOptimalityGap, 1, 2)
+
 /**
  * Defines all the python classes in the module libpylp. Here we decide 
  * which functions and data members we wish to expose.
@@ -184,6 +186,7 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("initialize", static_cast<void(LinearSolverBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&LinearSolverBackend::initialize))
 			.def("set_objective", static_cast<void(LinearSolverBackend::*)(const LinearObjective&)>(&LinearSolverBackend::setObjective))
 			.def("set_constraints", &LinearSolverBackend::setConstraints)
+			.def("set_optimality_gap", &LinearSolverBackend::setOptimalityGap, LsbSetOptimialityGap())
 			.def("solve", &solve)
 			;
 	boost::python::register_ptr_to_python<std::shared_ptr<LinearSolverBackend>>();
