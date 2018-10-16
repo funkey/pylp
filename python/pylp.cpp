@@ -26,7 +26,7 @@ std::shared_ptr<LinearSolverBackend> createLinearSolverBackend(Preference prefer
 	return factory.createLinearSolverBackend(preference);
 }
 
-std::pair<Solution, boost::python::str> solve(LinearSolverBackend& solver) {
+std::pair<Solution, boost::python::str> solve_linear(LinearSolverBackend& solver) {
 
 	Solution solution;
 	std::string message;
@@ -34,6 +34,42 @@ std::pair<Solution, boost::python::str> solve(LinearSolverBackend& solver) {
 	solver.solve(solution, message);
 
 	return std::make_pair(solution, boost::python::str(message));
+}
+
+void set_gap_linear_1(LinearSolverBackend& solver, double gap) {
+
+    solver.setOptimalityGap(gap);
+}
+
+void set_gap_linear_2(LinearSolverBackend& solver, double gap, bool absolute) {
+
+    solver.setOptimalityGap(gap, absolute);
+}
+
+std::shared_ptr<QuadraticSolverBackend> createQuadraticSolverBackend(Preference preference) {
+
+    SolverFactory factory;
+    return factory.createQuadraticSolverBackend(preference);
+
+}
+
+std::pair<Solution, boost::python::str> solve_quad(QuadraticSolverBackend& solver) {
+    
+    Solution solution;
+    std::string message;
+
+    solver.solve(solution, message);
+    return std::make_pair(solution, boost::python::str(message));
+}
+
+void set_gap_quad_1(QuadraticSolverBackend& solver, double gap) {
+
+    solver.setOptimalityGap(gap);
+}
+
+void set_gap_quad_2(QuadraticSolverBackend& solver, double gap, bool absolute) {
+
+    solver.setOptimalityGap(gap, absolute);
 }
 
 template <typename T>
@@ -62,8 +98,6 @@ void translateException(const Exception& e) {
 	else
 		PyErr_SetString(PyExc_RuntimeError, e.what());
 }
-
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(LsbSetOptimialityGap, setOptimalityGap, 1, 2)
 
 /**
  * Defines all the python classes in the module libpylp. Here we decide 
@@ -147,6 +181,21 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("__str__", &print<LinearObjective>)
 	;
 
+    // Quadratic Objective
+	boost::python::class_<QuadraticObjective>("QuadraticObjective", boost::python::init<unsigned int>())
+			.def("set_constant", &QuadraticObjective::setConstant)
+			.def("get_constant", &QuadraticObjective::getConstant)
+			.def("set_coefficient", &QuadraticObjective::setCoefficient)
+			.def("set_quadratic_coefficient", &QuadraticObjective::setQuadraticCoefficient)
+			.def("get_coefficients", &QuadraticObjective::getCoefficients, boost::python::return_value_policy<boost::python::copy_const_reference>())
+			.def("set_sense", &QuadraticObjective::setSense)
+			.def("get_sense", &QuadraticObjective::getSense)
+			.def("resize", &QuadraticObjective::resize)
+			.def("__len__", &QuadraticObjective::size)
+			.def("__str__", &print<QuadraticObjective>)
+	;
+
+
 	// Constraint
 	boost::python::class_<LinearConstraint>("LinearConstraint")
 			.def("set_coefficient", &LinearConstraint::setCoefficient)
@@ -180,6 +229,9 @@ BOOST_PYTHON_MODULE(pylp) {
 	// create_linear_solver
 	boost::python::def("create_linear_solver", createLinearSolverBackend);
 
+    // create_quadratic_solver
+    boost::python::def("create_quadratic_solver", createQuadraticSolverBackend);
+    
 	// LinearSolverBackend
 	boost::python::class_<LinearSolverBackend, boost::noncopyable>("LinearSolver", boost::python::no_init)
 			.def("initialize", static_cast<void(LinearSolverBackend::*)(unsigned int, VariableType)>(&LinearSolverBackend::initialize))
@@ -187,11 +239,27 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("set_objective", static_cast<void(LinearSolverBackend::*)(const LinearObjective&)>(&LinearSolverBackend::setObjective))
 			.def("set_constraints", &LinearSolverBackend::setConstraints)
 			.def("set_timeout", &LinearSolverBackend::setTimeout)
-			.def("set_optimality_gap", &LinearSolverBackend::setOptimalityGap, LsbSetOptimialityGap())
-			.def("solve", &solve)
+			.def("set_optimality_gap", &set_gap_linear_1)
+			.def("set_optimality_gap", &set_gap_linear_2)
+			.def("solve", &solve_linear)
 			;
+
+	// QuadraticSolverBackend
+	boost::python::class_<QuadraticSolverBackend, boost::noncopyable>("QuadraticSolver", boost::python::no_init)
+			.def("initialize", static_cast<void(QuadraticSolverBackend::*)(unsigned int, VariableType)>(&QuadraticSolverBackend::initialize))
+			.def("initialize", static_cast<void(QuadraticSolverBackend::*)(unsigned int, VariableType, const std::map<unsigned int, VariableType>&)>(&QuadraticSolverBackend::initialize))
+			.def("set_objective", static_cast<void(QuadraticSolverBackend::*)(const QuadraticObjective&)>(&QuadraticSolverBackend::setObjective))
+			.def("set_constraints", &QuadraticSolverBackend::setConstraints)
+			.def("set_timeout", &QuadraticSolverBackend::setTimeout)
+			.def("set_optimality_gap", &set_gap_quad_1)
+			.def("set_optimality_gap", &set_gap_quad_2)
+			.def("solve", &solve_quad)
+			;
+
 	boost::python::register_ptr_to_python<std::shared_ptr<LinearSolverBackend>>();
+	boost::python::register_ptr_to_python<std::shared_ptr<QuadraticSolverBackend>>();
 	::std_pair_to_python_converter<Solution, boost::python::str>();
+
 }
 
 } // namespace pylp
