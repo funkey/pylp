@@ -44,7 +44,7 @@ class cmake_lib(build_py):
 
 setup(
     name='pylp',
-    version='0.0.1',
+    version='0.0.2',
     author='Jan Funke',
     author_email='jfunke@iri.upc.edu',
     description='Python wrapper for the Candidate MC.',
