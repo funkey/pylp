@@ -241,6 +241,7 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("set_timeout", &LinearSolverBackend::setTimeout)
 			.def("set_optimality_gap", &set_gap_linear_1)
 			.def("set_optimality_gap", &set_gap_linear_2)
+			.def("set_num_threads", &LinearSolverBackend::setNumThreads)
 			.def("solve", &solve_linear)
 			;
 
@@ -253,6 +254,7 @@ BOOST_PYTHON_MODULE(pylp) {
 			.def("set_timeout", &QuadraticSolverBackend::setTimeout)
 			.def("set_optimality_gap", &set_gap_quad_1)
 			.def("set_optimality_gap", &set_gap_quad_2)
+			.def("set_num_threads", &LinearSolverBackend::setNumThreads)
 			.def("solve", &solve_quad)
 			;
 
