@@ -124,5 +124,5 @@ cdef extern from 'impl/solvers/SolverFactory.cpp':
 
 cdef extern from 'impl/solvers/SolverFactory.h':
     cdef cppclass SolverFactory:
-        shared_ptr[LinearSolverBackend] createLinearSolverBackend(Preference)
-        shared_ptr[QuadraticSolverBackend] createQuadraticSolverBackend(Preference)
+        shared_ptr[LinearSolverBackend] createLinearSolverBackend(Preference) except +
+        shared_ptr[QuadraticSolverBackend] createQuadraticSolverBackend(Preference) except +
