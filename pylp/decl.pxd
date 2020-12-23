@@ -114,6 +114,9 @@ cdef extern from 'impl/solvers/QuadraticSolverBackend.h':
         void setNumThreads(unsigned int)
         bool solve(Solution& solution, string& message)
 
+cdef extern from 'impl/solvers/ScipBackend.cpp':
+    pass
+
 cdef extern from 'impl/solvers/GurobiBackend.cpp':
     pass
 

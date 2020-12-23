@@ -21,7 +21,7 @@ setup(
                 ],
                 extra_compile_args=['-O3', '-std=c++11'],
                 include_dirs=['pylp/impl'],
-                libraries=['gurobi80'],
+                libraries=['gurobi80', 'scipopt'],
                 language='c++')
         ])
 )
