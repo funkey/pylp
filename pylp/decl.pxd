@@ -1,6 +1,7 @@
 from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.memory cimport shared_ptr
+from libcpp.map cimport map
 
 cdef extern from 'impl/solvers/Relation.h':
     cdef enum Relation:
@@ -92,8 +93,7 @@ cdef extern from 'impl/solvers/LinearConstraints.h':
 
 cdef extern from 'impl/solvers/LinearSolverBackend.h':
     cdef cppclass LinearSolverBackend:
-        void initialize(unsigned int, VariableType)
-        # TODO: special variable types
+        void initialize(unsigned int, VariableType, map[unsigned int, VariableType]&) except +
         void setObjective(LinearObjective&)
         void setConstraints(LinearConstraints&)
         void addConstraint(LinearConstraint&)
@@ -104,8 +104,7 @@ cdef extern from 'impl/solvers/LinearSolverBackend.h':
 
 cdef extern from 'impl/solvers/QuadraticSolverBackend.h':
     cdef cppclass QuadraticSolverBackend:
-        void initialize(unsigned int, VariableType)
-        # TODO: special variable types
+        void initialize(unsigned int, VariableType, map[unsigned int, VariableType]&) except +
         void setObjective(QuadraticObjective&)
         void setConstraints(LinearConstraints&)
         void addConstraint(LinearConstraint&)

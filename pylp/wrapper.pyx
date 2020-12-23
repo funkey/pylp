@@ -2,6 +2,7 @@
 
 from libc.stdint cimport uint32_t
 from libcpp.memory cimport shared_ptr
+from libcpp.map cimport map as cppmap
 from libcpp.string cimport string
 from cython.operator cimport dereference as deref
 cimport decl
@@ -185,12 +186,17 @@ cdef class LinearSolver:
     def __cinit__(
             self,
             num_variables,
-            variable_type,
-            preference = Preference.Any):
-        self.num_variables = num_variables
+            default_variable_type,
+            dict variable_types=None,
+            Preference preference=Preference.Any):
         cdef decl.SolverFactory factory
+        cdef cppmap[unsigned int, decl.VariableType] vtypes
+        if variable_types is not None:
+            for k, v in variable_types.items():
+                vtypes[k] = v
         self.p = factory.createLinearSolverBackend(preference)
-        deref(self.p).initialize(num_variables, variable_type)
+        self.num_variables = num_variables
+        deref(self.p).initialize(num_variables, default_variable_type, vtypes)
 
     def set_objective(self, LinearObjective objective):
         deref(self.p).setObjective(objective.p[0])
