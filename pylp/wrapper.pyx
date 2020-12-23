@@ -221,3 +221,47 @@ cdef class LinearSolver:
         cdef string message
         deref(self.p).solve(solution.p[0], message)
         return solution, message
+
+cdef class QuadraticSolver:
+
+    cdef shared_ptr[decl.QuadraticSolverBackend] p
+    cdef unsigned int num_variables
+
+    def __cinit__(
+            self,
+            num_variables,
+            default_variable_type,
+            dict variable_types=None,
+            Preference preference=Preference.Any):
+        cdef decl.SolverFactory factory
+        cdef cppmap[unsigned int, decl.VariableType] vtypes
+        if variable_types is not None:
+            for k, v in variable_types.items():
+                vtypes[k] = v
+        self.p = factory.createQuadraticSolverBackend(preference)
+        self.num_variables = num_variables
+        deref(self.p).initialize(num_variables, default_variable_type, vtypes)
+
+    def set_objective(self, QuadraticObjective objective):
+        deref(self.p).setObjective(objective.p[0])
+
+    def set_constraints(self, LinearConstraints constraints):
+        deref(self.p).setConstraints(constraints.p[0])
+
+    def add_constraint(self, LinearConstraint constraint):
+        deref(self.p).addConstraint(constraint.p[0])
+
+    def set_timeout(self, timeout):
+        deref(self.p).setTimeout(timeout)
+
+    def set_optimality_gap(self, gap, absolute=False):
+        deref(self.p).setOptimalityGap(gap, absolute)
+
+    def set_num_threads(self, num_threads):
+        deref(self.p).setNumThreads(num_threads)
+
+    def solve(self):
+        solution = Solution(self.num_variables)
+        cdef string message
+        deref(self.p).solve(solution.p[0], message)
+        return solution, message
