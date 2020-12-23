@@ -2,5 +2,5 @@
 	path = cmake
 	url = https://github.com/funkey/cmake
 [submodule "solver"]
-	path = solvers
+	path = pylp/impl/solvers
 	url = https://github.com/funkey/solvers

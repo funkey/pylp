@@ -1,3 +1,4 @@
+pylp/wrapper.cpp
 *.so
 *.dylib
 *.dll
