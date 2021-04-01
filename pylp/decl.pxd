@@ -100,6 +100,7 @@ cdef extern from 'impl/solvers/LinearSolverBackend.h':
         void setTimeout(double)
         void setOptimalityGap(double, bool)
         void setNumThreads(unsigned int)
+        void setVerbose(bool)
         bool solve(Solution& solution, string& message)
 
 cdef extern from 'impl/solvers/QuadraticSolverBackend.h':
