@@ -220,6 +220,9 @@ cdef class LinearSolver:
     def set_num_threads(self, num_threads):
         deref(self.p).setNumThreads(num_threads)
 
+    def set_verbose(self, verbose):
+        deref(self.p).setVerbose(verbose)
+
     def solve(self):
         solution = Solution(self.num_variables)
         cdef string message
