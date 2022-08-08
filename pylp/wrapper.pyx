@@ -86,6 +86,9 @@ cdef class QuadraticObjective:
     def set_coefficient(self, i, value):
         self.p.setCoefficient(i, value)
 
+    def get_coefficients(self):
+        return self.p.getCoefficients()
+
     def set_quadratic_coefficient(self, i, j, value):
         self.p.setQuadraticCoefficient(i, j, value)
 
@@ -120,6 +123,9 @@ cdef class LinearObjective:
     def set_coefficient(self, i, value):
         self.p.setCoefficient(i, value)
 
+    def get_coefficients(self):
+        return self.p.getCoefficients()
+
     def set_sense(self, sense):
         self.p.setSense(sense)
 
@@ -144,6 +150,9 @@ cdef class LinearConstraint:
 
     def set_coefficient(self, i, value):
         self.p.setCoefficient(i, value)
+
+    def get_coefficients(self):
+        return self.p.getCoefficients()
 
     def set_relation(self, relation):
         self.p.setRelation(relation)
