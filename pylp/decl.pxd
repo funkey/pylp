@@ -2,6 +2,7 @@ from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.memory cimport shared_ptr
 from libcpp.map cimport map
+from libcpp.vector cimport vector
 
 cdef extern from 'impl/solvers/Relation.h':
     cdef enum Relation:
@@ -49,6 +50,7 @@ cdef extern from 'impl/solvers/QuadraticObjective.h':
         void setConstant(double)
         double getConstant()
         void setCoefficient(unsigned int, double)
+        const vector[double]& getCoefficients()
         void setQuadraticCoefficient(unsigned int, unsigned int, double)
         void setSense(Sense)
         Sense getSense()
@@ -62,6 +64,7 @@ cdef extern from 'impl/solvers/LinearObjective.h':
         void setConstant(double)
         double getConstant()
         void setCoefficient(unsigned int, double)
+        const vector[double]& getCoefficients()
         void setSense(Sense)
         Sense getSense()
         void resize(unsigned int)
@@ -74,6 +77,7 @@ cdef extern from 'impl/solvers/LinearConstraint.h':
     cdef cppclass LinearConstraint:
         LinearConstraint() except +
         void setCoefficient(unsigned int, double)
+        const map[unsigned int, double]& getCoefficients()
         void setRelation(Relation)
         void setValue(double)
         Relation getRelation()
