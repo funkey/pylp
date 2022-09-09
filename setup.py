@@ -4,7 +4,7 @@ from Cython.Build import cythonize
 
 setup(
         name='pylp',
-        version='0.1',
+        version='0.2',
         description='Python wrappers for popular MIP solvers.',
         url='https://github.com/funkey/pylp',
         author='Jan Funke',
