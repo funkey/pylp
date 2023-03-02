@@ -1,4 +1,4 @@
-import pylp
+import ilpy
 import unittest
 import logging
 
@@ -12,23 +12,23 @@ class TestSolvers(unittest.TestCase):
         num_vars = 10
         special_var = 5
 
-        solver = pylp.LinearSolver(
+        solver = ilpy.LinearSolver(
             num_vars,
-            pylp.VariableType.Binary,
+            ilpy.VariableType.Binary,
             {
-                special_var: pylp.VariableType.Continuous
+                special_var: ilpy.VariableType.Continuous
             },
             preference)
 
-        objective = pylp.LinearObjective()
+        objective = ilpy.LinearObjective()
         for i in range(num_vars):
             objective.set_coefficient(i, 1.0)
         objective.set_coefficient(special_var, 0.5)
 
-        constraint = pylp.LinearConstraint()
+        constraint = ilpy.LinearConstraint()
         for i in range(num_vars):
             constraint.set_coefficient(i, 1.0)
-        constraint.set_relation(pylp.Relation.Equal)
+        constraint.set_relation(ilpy.Relation.Equal)
         constraint.set_value(1.0)
 
         solver.set_objective(objective)
@@ -39,7 +39,7 @@ class TestSolvers(unittest.TestCase):
         self.assertEqual(solution[5], 1)
 
     def test_any(self):
-        self.simple_solver_test(pylp.Preference.Any)
+        self.simple_solver_test(ilpy.Preference.Any)
 
     def test_gurobi(self):
-        self.simple_solver_test(pylp.Preference.Gurobi)
+        self.simple_solver_test(ilpy.Preference.Gurobi)

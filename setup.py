@@ -3,24 +3,24 @@ from setuptools.extension import Extension
 from Cython.Build import cythonize
 
 setup(
-        name='pylp',
+        name='ilpy',
         version='0.2',
         description='Python wrappers for popular MIP solvers.',
-        url='https://github.com/funkey/pylp',
+        url='https://github.com/funkelab/ilpy',
         author='Jan Funke',
         author_email='funkej@janelia.hhmi.org',
         license='MIT',
         packages=[
-            'pylp'
+            'ilpy'
         ],
         ext_modules=cythonize([
             Extension(
-                'pylp.wrapper',
+                'ilpy.wrapper',
                 sources=[
-                    'pylp/wrapper.pyx'
+                    'ilpy/wrapper.pyx'
                 ],
                 extra_compile_args=['-O3', '-std=c++11'],
-                include_dirs=['pylp/impl'],
+                include_dirs=['ilpy/impl'],
                 libraries=['gurobi80', 'scipopt'],
                 language='c++')
         ])
