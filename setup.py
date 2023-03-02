@@ -21,7 +21,7 @@ setup(
                 ],
                 extra_compile_args=['-O3', '-std=c++11'],
                 include_dirs=['ilpy/impl'],
-                libraries=['gurobi80', 'scipopt'],
+                libraries=['scip'],
                 language='c++')
         ])
 )
