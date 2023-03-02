@@ -14,3 +14,5 @@ tests:
 
 clean:
 	rm -rf build dist
+	rm -rf ilpy/*.cpp
+	rm -rf ilpy/*.so

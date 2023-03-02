@@ -1,2 +1,2 @@
 git submodule update --init
-${PYTHON} setup.py install
+${PYTHON} -m pip install --no-deps . -vv
