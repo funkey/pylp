@@ -1,0 +1,25 @@
+package:
+  name: ilpy
+  version: "0.2"
+
+source:
+  git_url: https://github.com/funkelab/ilpy
+  git_rev: 29b3666e4edd709766bc97ed99ed1ccb83ff65ed
+
+build:
+  number: 1
+
+requirements:
+ build:
+   - {{ compiler('cxx') }}
+ host:
+   - cython
+   - python {{python}}
+   - scip
+ run:
+   - python {{python}}
+   - scip
+
+about:
+  home: https://github.com/funkelab/ilpy
+  license: MIT License
